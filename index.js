@@ -16,7 +16,7 @@ app.post('/chat', async (req, res) => {
         const tourData = await sheetRes.text();
 
         // 2. Gửi dữ liệu đó cho Gemini xử lý
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel("gemini-1.5-flash");
         const prompt = `Bạn là nhân viên tư vấn của Safitour. 
 Dưới đây là danh sách tour và giá mới nhất từ hệ thống:
 ${tourData}
