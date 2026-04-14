@@ -18,10 +18,15 @@ app.post('/chat', async (req, res) => {
         });
         
         const data = await response.json();
-        // Trả về câu trả lời mà Make đã xử lý
-        res.json({ reply: data.reply });
+        
+        // Lấy câu trả lời từ Make, nếu Make trả về trống thì dùng câu thông báo lỗi
+        const botReply = data.reply || "SafiBot chưa nhận được phản hồi từ máy chủ, Anh/Chị thử lại nhé!";
+        
+        // CHỈ DÙNG 1 DÒNG res.json DUY NHẤT Ở ĐÂY
+        res.json({ reply: botReply });
+
     } catch (error) {
-        console.error(error);
+        console.error("Lỗi kết nối:", error);
         res.json({ reply: "SafiBot đang bận xử lý dữ liệu, Anh/Chị đợi em vài giây nhé!" });
     }
 });
