@@ -13,7 +13,7 @@ app.post('/chat', async (req, res) => {
         const sheetRes = await fetch(SHEET_URL);
         const tourData = await sheetRes.text();
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
         
         const prompt = `Bạn là chuyên viên Safitour. Dựa trên dữ liệu tour:
 ${tourData}
