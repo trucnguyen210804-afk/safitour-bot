@@ -22,7 +22,10 @@ app.post('/chat', async (req, res) => {
             res.json({ reply: "Make không trả về nội dung. Bạn kiểm tra lại module Response nhé!" });
         }
 
-    } 
+    } catch (error) {
+        console.error(error);
+        res.json({ reply: "Lỗi kết nối Render-Make. Thử lại sau vài giây nhé!" });
+    }
 });
 
 app.listen(3000, () => console.log('SafiBot Online'));
