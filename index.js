@@ -4,8 +4,8 @@ const app = express();
 app.use(express.json());
 app.use(require('cors')());
 
+// API Key của bạn
 const genAI = new GoogleGenerativeAI("AIzaSyA9Be9Tcd2A3dp3sq2QjXRopYr82buQISs"); 
-
 const SHEET_URL = "https://docs.google.com/spreadsheets/d/1DPnhqKzpOSCaB3jF7Gdd-YCSAssurW8soySKNa1AHIo/gviz/tq?tqx=out:csv";
 
 app.post('/chat', async (req, res) => {
@@ -13,23 +13,20 @@ app.post('/chat', async (req, res) => {
         const sheetRes = await fetch(SHEET_URL);
         const tourData = await sheetRes.text();
 
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        // Sử dụng model với hậu tố -latest để đảm bảo tìm thấy
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
         
-        const prompt = `Bạn là chuyên viên Safitour. Dựa trên dữ liệu tour:
+        const prompt = `Bạn là nhân viên tư vấn của Safitour. Dựa trên dữ liệu:
 ${tourData}
-
-Hãy trả lời câu hỏi: ${req.body.message}`;
+Hãy trả lời khách: ${req.body.message}`;
 
         const result = await model.generateContent(prompt);
-        const response = await result.response;
-        const text = response.text(); 
-        
-        res.json({ reply: text });
+        res.json({ reply: result.response.text() });
 
     } catch (error) {
-        console.error(error);
-        res.json({ reply: "SafiBot đang bận tí, bạn hỏi lại sau vài giây nhé!" });
+        console.error("Lỗi:", error.message);
+        res.json({ reply: "SafiBot đang khởi động lại thư viện AI, bạn đợi 10 giây nhé!" });
     }
 });
 
-app.listen(3000, () => console.log('Bot Online'));
+app.listen(3000, () => console.log('SafiBot v2 Online'));
