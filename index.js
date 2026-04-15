@@ -11,7 +11,6 @@ const MAKE_WEBHOOK_URL = "https://hook.eu1.make.com/7uq6zzjves5ale3u4xmgdtbuvmit
 app.post('/chat', async (req, res) => {
     try {
         const userMessage = req.body.message;
-        // Tu tao user_id de dong bo voi he thong cua ban ban
         const userId = req.body.user_id || `web_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
 
         console.log("User message:", userMessage);
@@ -37,21 +36,16 @@ app.post('/chat', async (req, res) => {
             throw new Error(`Make status: ${response.status}`);
         }
 
-        const textData = await response.text();
-        console.log("Raw response:", textData);
+        // CHỖ THAY ĐỔI CHÍNH: Nhận dữ liệu dạng văn bản (text) thay vì JSON
+        const responseText = await response.text();
+        console.log("Raw response from Make:", responseText);
 
-        let data;
-        try {
-            data = JSON.parse(textData);
-        } catch (e) {
-            throw new Error("Data tu Make khong phai JSON hop le");
-        }
-
-        if (data && data.reply) {
-            res.json({ reply: data.reply });
+        if (responseText && responseText.trim().length > 0) {
+            // Trả về cho giao diện web đúng định dạng nó cần
+            res.json({ reply: responseText.trim() });
         } else {
             res.json({
-                reply: "He thong chua co cau tra loi. Vui long thu lai sau."
+                reply: "Hệ thống chưa có câu trả lời, vui lòng thử lại sau."
             });
         }
 
@@ -63,7 +57,7 @@ app.post('/chat', async (req, res) => {
         }
 
         res.json({
-            reply: "He thong dang ban, ban vui long cho giay lat va nhan lai nhe."
+            reply: "Hệ thống đang bận, bạn vui lòng chờ giây lát và nhắn lại nhé."
         });
     }
 });
