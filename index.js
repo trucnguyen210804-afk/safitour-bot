@@ -105,7 +105,7 @@ app.post('/chat', async (req, res) => {
         }
 
         res.json({
-            reply: "Hệ thống đang bận, bạn vui lòng thử lại sau."
+            reply: "Xin lỗi bạn, hiện tại mình chưa có thông tin chi tiết về vấn đề này. Để được hỗ trợ tốt nhất, bạn có thể liên hệ trực tiếp hotline 0911 692 948 để nhân viên tư vấn kỹ hơn nhé!"
         });
     }
 });
